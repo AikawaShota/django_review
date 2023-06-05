@@ -1,13 +1,15 @@
 from django.shortcuts import render
 from .forms import WineForm
-import pickle
-import sklearn
+import joblib
+import numpy as np
 
 
 def calc_wine(colorint, proline):
-    rfc = pickle.load(open("finalized_rfc.sav", "rb"))
-    wine = rfc.predict([[colorint, proline]])
-    return wine
+    loaded_model = joblib.load(open("finalized_rfc.sav", "rb"))
+    x = np.array([colorint, proline])
+    param = x.reshape(1, -1)
+    pred = loaded_model.predict(param)
+    return pred
 
 
 # Create your views here.
